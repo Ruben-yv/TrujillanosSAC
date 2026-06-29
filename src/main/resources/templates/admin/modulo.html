@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${'Admin - ' + moduloActual}">Admin</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+<aside class="admin-sidebar">
+    <div class="brand">El Trujillano</div>
+
+    <nav>
+        <a th:each="modulo : ${modulosAdmin}"
+           th:href="${modulo.url()}"
+           th:classappend="${modulo.url() == ('/admin/' + moduloActual)} ? 'is-active'">
+            <i th:class="${'fa-solid ' + modulo.icono()}"></i>
+            <span th:text="${modulo.nombre()}">Modulo</span>
+        </a>
+    </nav>
+
+    <a class="back-store" href="/ventas/catalogo">
+        <i class="fa-solid fa-store"></i>
+        Volver a ventas
+    </a>
+</aside>
+
+<main class="admin-content">
+    <header>
+        <span>Bienvenido <strong th:text="${usuarioNombre}">admin</strong></span>
+    </header>
+
+    <section class="module-panel">
+        <p class="eyebrow">Modulo interno</p>
+        <h1 th:text="${#strings.capitalize(moduloActual)}">Dashboard</h1>
+        <p>Esta pantalla ya esta protegida para empleados. Aqui se puede conectar luego la vista real del modulo.</p>
+    </section>
+</main>
+</body>
+</html>
