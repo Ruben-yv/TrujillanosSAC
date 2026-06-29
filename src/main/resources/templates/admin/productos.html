@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar productos</title>
+    <link rel="stylesheet" href="/css/admin-productos.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="/js/admin-productos.js" defer></script>
+</head>
+<body>
+
+<header class="admin-products-nav">
+    <a class="admin-logo" href="/ventas/catalogo" aria-label="Volver al catalogo">
+        <img src="/img/payaso_ventas.png" alt="Logo">
+    </a>
+
+    <div class="admin-user">
+        <i class="fa-regular fa-circle-user"></i>
+        <span th:text="${usuarioNombre}">Admin</span>
+        <a href="/ventas/catalogo" aria-label="Volver a ventas">
+            <i class="fa-solid fa-store"></i>
+        </a>
+    </div>
+</header>
+
+<main class="products-admin-page">
+    <section class="products-toolbar">
+        <label class="product-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input id="adminProductSearch" type="search" placeholder="Introduzca el nombre del producto">
+        </label>
+
+        <button class="add-product-button" type="button" data-open-product-modal>
+            <i class="fa-solid fa-plus"></i>
+            Añadir Producto
+        </button>
+    </section>
+
+    <section class="products-table-wrapper">
+        <table class="products-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Descripcion</th>
+                <th>Categoria</th>
+                <th>Unidad de medida</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="producto : ${productos}" th:data-product-name="${#strings.toLowerCase(producto.nombre)}">
+                <td th:text="${#numbers.formatInteger(producto.idProducto, 2)}">01</td>
+                <td>
+                    <img class="table-product-image"
+                         th:src="${producto.imagenUrl}"
+                         th:alt="${producto.nombre}"
+                         onerror="this.src='/img/tetin%20pop.jpeg'">
+                </td>
+                <td th:text="${producto.nombre}">Producto</td>
+                <td th:text="${#numbers.formatDecimal(producto.precio, 1, 2)}">0.00</td>
+                <td th:text="${producto.descripcion}">Descripcion</td>
+                <td th:text="${producto.categoria.nombre}">Categoria</td>
+                <td th:text="${producto.presentacion.nombre}">Presentacion</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(productos)}">
+                <td colspan="7" class="empty-table">No hay productos registrados.</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+
+<div class="product-modal" id="productModal" aria-hidden="true">
+    <form class="product-modal-card"
+          th:action="@{/admin/productos}"
+          method="post"
+          enctype="multipart/form-data">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+        <button class="modal-close" type="button" data-close-product-modal aria-label="Cerrar">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <h1>Añadir un nuevo producto</h1>
+        <p>Ingrese los datos requeridos</p>
+
+        <label>
+            Imagen:
+            <span class="image-upload-button">
+                <span id="imageUploadText">Cargar imagen</span>
+                <i class="fa-solid fa-file-arrow-up"></i>
+                <input id="productImageInput" type="file" name="imagen" accept="image/*">
+            </span>
+        </label>
+
+        <label>
+            Nombre del producto:
+            <input type="text" name="nombre" placeholder="------" required maxlength="100">
+        </label>
+
+        <label>
+            Precio:
+            <input type="number" name="precio" min="0.01" step="0.01" required>
+        </label>
+
+        <label>
+            Stock:
+            <input type="number" name="stock" min="0" value="0" required>
+        </label>
+
+        <label>
+            Descripcion:
+            <textarea name="descripcion" placeholder="El producto es....." required maxlength="255"></textarea>
+        </label>
+
+        <div class="form-grid">
+            <label>
+                Stock minimo:
+                <input type="number" name="stockMinimo" min="0" value="0" required>
+            </label>
+
+            <label>
+                Stock limite:
+                <input type="number" name="stockLimite" min="0" value="0" required>
+            </label>
+        </div>
+
+        <label>
+            Categoria:
+            <select name="idCategoria" required>
+                <option value="">Seleccione una categoria</option>
+                <option th:each="categoria : ${categorias}"
+                        th:value="${categoria.idCategoria}"
+                        th:text="${categoria.nombre}">Categoria</option>
+            </select>
+        </label>
+
+        <label>
+            Unidad de medida:
+            <select name="idPresentacion" required>
+                <option value="">Seleccione una presentacion</option>
+                <option th:each="presentacion : ${presentaciones}"
+                        th:value="${presentacion.idPresentacion}"
+                        th:text="${presentacion.nombre}">Presentacion</option>
+            </select>
+        </label>
+
+        <div class="modal-actions">
+            <button type="button" data-close-product-modal>Cancelar</button>
+            <button type="submit">Agregar</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
