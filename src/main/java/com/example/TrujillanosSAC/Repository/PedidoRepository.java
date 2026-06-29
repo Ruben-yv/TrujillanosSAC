@@ -20,4 +20,14 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
             order by p.fechaEmision desc, p.hora desc
             """)
     List<Pedido> findByUsername(@Param("username") String username);
+
+    @Query("""
+            select p
+            from Pedido p
+            join fetch p.estado
+            join fetch p.cliente c
+            join fetch c.persona
+            order by p.fechaEmision desc, p.hora desc
+            """)
+    List<Pedido> findAllParaGestion();
 }

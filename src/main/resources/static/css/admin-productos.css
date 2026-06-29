@@ -64,7 +64,7 @@ body{
 
 .products-toolbar{
     display:grid;
-    grid-template-columns:1fr auto;
+    grid-template-columns:1fr auto auto;
     gap:16px;
     margin-bottom:22px;
 }
@@ -102,6 +102,11 @@ body{
     background:#455d9b;
     color:#fff;
     cursor:pointer;
+}
+
+.admin-link-button{
+    text-decoration:none;
+    justify-content:center;
 }
 
 .products-table-wrapper{
@@ -168,6 +173,47 @@ body{
 
 .empty-table{
     color:#6b7280;
+}
+
+.orders-table{
+    min-width:980px;
+}
+
+.orders-table td{
+    vertical-align:middle;
+}
+
+.orders-table small{
+    display:block;
+    margin-top:4px;
+    color:#6b7280;
+}
+
+.order-products{
+    max-width:260px;
+    line-height:1.35;
+}
+
+.order-status-form select{
+    min-width:160px;
+    min-height:34px;
+    border:0;
+    border-radius:5px;
+    padding:0 8px;
+    background:#16264d;
+    color:#fff;
+    outline:0;
+}
+
+.save-status-button{
+    width:42px;
+    height:42px;
+    border:0;
+    border-radius:50%;
+    background:#455d9b;
+    color:#fff;
+    cursor:pointer;
+    font-size:16px;
 }
 
 .product-modal,
